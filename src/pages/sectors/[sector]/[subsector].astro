@@ -1,0 +1,59 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const subs = await getCollection('subsectors');
+  return subs.map((sub) => ({
+    params: { sector: sub.data.sector, subsector: sub.id },
+    props: { sub },
+  }));
+}
+
+const { sub } = Astro.props;
+const { Content } = await render(sub);
+
+const sectors = await getCollection('sectors');
+const parent = sectors.find((s) => s.id === sub.data.sector);
+
+const allCompanies = await getCollection('companies');
+const companies = allCompanies
+  .filter((c) => c.data.subsector === sub.id)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const fmt = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+---
+<Base title={`${sub.data.title} — ResearchVault`} description={sub.data.summary}>
+  <div class="crumb">
+    <a href="/">Home</a><span>/</span>
+    <a href="/sectors">Sectors</a><span>/</span>
+    <a href={`/sectors/${sub.data.sector}`}>{parent?.data.title ?? sub.data.sector}</a><span>/</span>
+    {sub.data.title}
+  </div>
+
+  <div class="kicker">Sub-sector</div>
+  <h1>{sub.data.title}</h1>
+  <p class="lede">{sub.data.summary}</p>
+  <div class="meta-line">Updated {fmt(sub.data.updated)} · {companies.length} companies</div>
+
+  {sub.data.economicCharacter && (
+    <div class="callout"><div class="h">Economic Character</div><p>{sub.data.economicCharacter}</p></div>
+  )}
+
+  <article class="prose"><Content /></article>
+
+  {companies.length > 0 && (
+    <>
+      <h2>Companies</h2>
+      <div class="grid">
+        {companies.map((c) => (
+          <a class="card" href={`/companies/${c.id}`}>
+            <h3>{c.data.title} {c.data.conviction && <span class={`badge ${c.data.conviction}`}>{c.data.conviction}</span>}</h3>
+            <p>{c.data.summary}</p>
+            <div class="card-meta">{c.data.stage ?? ''}{c.data.valuation ? ` · ${c.data.valuation}` : ''}</div>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+</Base>

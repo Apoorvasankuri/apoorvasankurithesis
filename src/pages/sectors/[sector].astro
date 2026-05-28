@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const sectors = await getCollection('sectors');
+  return sectors.map((sector) => ({
+    params: { sector: sector.id },
+    props: { sector },
+  }));
+}
+
+const { sector } = Astro.props;
+const { Content } = await render(sector);
+
+const allSubs = await getCollection('subsectors');
+const subs = allSubs
+  .filter((x) => x.data.sector === sector.id)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const allCompanies = await getCollection('companies');
+const companies = allCompanies
+  .filter((c) => c.data.sector === sector.id)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const fmt = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+---
+<Base title={`${sector.data.title} — ResearchVault`} description={sector.data.summary}>
+  <div class="crumb"><a href="/">Home</a><span>/</span><a href="/sectors">Sectors</a><span>/</span>{sector.data.title}</div>
+
+  <div class="kicker">Sector Thesis</div>
+  <h1>{sector.data.title}</h1>
+  {sector.data.tagline && <p class="lede">{sector.data.tagline}</p>}
+  <div class="meta-line">Updated {fmt(sector.data.updated)} · {companies.length} companies · {subs.length} sub-sectors</div>
+
+  {sector.data.convictionOneLiner && (
+    <div class="thesis-box">
+      <div class="label">The Argument in One Breath</div>
+      <p>{sector.data.convictionOneLiner}</p>
+    </div>
+  )}
+
+  <article class="prose"><Content /></article>
+
+  {subs.length > 0 && (
+    <>
+      <h2>Sub-sectors</h2>
+      <ul class="linklist">
+        {subs.map((s) => (
+          <li><a href={`/sectors/${sector.id}/${s.id}`}>
+            <span class="ll-title">{s.data.title}</span>
+            <span class="ll-sub">{s.data.summary}</span>
+            <span class="ll-meta">{allCompanies.filter(c => c.data.subsector === s.id).length} cos</span>
+          </a></li>
+        ))}
+      </ul>
+    </>
+  )}
+
+  {companies.length > 0 && (
+    <>
+      <h2>Companies in this sector</h2>
+      <div class="grid">
+        {companies.map((c) => (
+          <a class="card" href={`/companies/${c.id}`}>
+            <h3>{c.data.title} {c.data.conviction && <span class={`badge ${c.data.conviction}`}>{c.data.conviction}</span>}</h3>
+            <p>{c.data.summary}</p>
+            <div class="card-meta">{c.data.stage ?? ''}{c.data.valuation ? ` · ${c.data.valuation}` : ''}</div>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+</Base>

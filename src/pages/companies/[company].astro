@@ -1,0 +1,70 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const companies = await getCollection('companies');
+  return companies.map((company) => ({
+    params: { company: company.id },
+    props: { company },
+  }));
+}
+
+const { company } = Astro.props;
+const { Content } = await render(company);
+const d = company.data;
+
+const sectors = await getCollection('sectors');
+const subs = await getCollection('subsectors');
+const parentSector = sectors.find((s) => s.id === d.sector);
+const parentSub = subs.find((s) => s.id === d.subsector);
+
+const fmt = (x) => new Date(x).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+const facts = [
+  ['Stage', d.stage],
+  ['Ticker', d.ticker],
+  ['Valuation', d.valuation],
+  ['Revenue', d.revenue],
+  ['Multiple', d.multiple],
+  ['Conviction', d.conviction],
+].filter(([, v]) => v);
+---
+<Base title={`${d.title} — ResearchVault`} description={d.summary}>
+  <div class="crumb">
+    <a href="/">Home</a><span>/</span>
+    <a href={`/sectors/${d.sector}`}>{parentSector?.data.title ?? d.sector}</a>
+    {parentSub && <><span>/</span><a href={`/sectors/${d.sector}/${d.subsector}`}>{parentSub.data.title}</a></>}
+    <span>/</span>{d.title}
+  </div>
+
+  <div class="kicker">Company Deep-Dive</div>
+  <h1>{d.title} {d.conviction && <span class={`badge ${d.conviction}`}>{d.conviction}</span>}</h1>
+  <p class="lede">{d.summary}</p>
+  <div class="meta-line">Updated {fmt(d.updated)}</div>
+
+  {facts.length > 0 && (
+    <div class="datasheet">
+      {facts.map(([k, v]) => (
+        <div class="cell"><div class="k">{k}</div><div class="v">{v}</div></div>
+      ))}
+    </div>
+  )}
+
+  {d.thesisFit && (
+    <div class="callout"><div class="h">Thesis Fit</div><p>{d.thesisFit}</p></div>
+  )}
+
+  <article class="prose"><Content /></article>
+
+  {d.sources.length > 0 && (
+    <>
+      <h2>Sources</h2>
+      <ul>
+        {d.sources.map((s) => (<li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>))}
+      </ul>
+    </>
+  )}
+
+  <p class="disclaimer">Independent analysis for discussion only — not investment advice. Figures are from public sources, time-sensitive, and may be outdated or inaccurate. Private-company valuations are estimates that vary by source.</p>
+</Base>

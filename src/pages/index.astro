@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const sectors = (await getCollection('sectors'))
+  .sort((a, b) => a.data.order - b.data.order);
+const companies = await getCollection('companies');
+
+const fmt = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+---
+<Base title="ResearchVault — Sector & Company Research">
+  <div class="kicker">Independent Research Vault</div>
+  <h1>A living library of sector theses<br />and company deep-dives.</h1>
+  <p class="lede">Structured analysis that drills from sector → sub-sector → individual company. Continuously expanded, one Markdown file at a time.</p>
+
+  <div class="stat-row">
+    <div class="stat"><div class="big">{sectors.length}</div><div class="cap">Sectors covered</div></div>
+    <div class="stat"><div class="big">{companies.length}</div><div class="cap">Companies analyzed</div></div>
+    <div class="stat"><div class="big">{sectors.filter(s => s.data.status === 'active').length}</div><div class="cap">Active theses</div></div>
+  </div>
+
+  <h2>Sectors</h2>
+  <div class="grid">
+    {sectors.map((s) => (
+      <a class="card" href={`/sectors/${s.id}`}>
+        <h3>{s.data.title}</h3>
+        <p>{s.data.summary}</p>
+        <div class="card-meta">
+          {s.data.status !== 'active' && <span class={`badge status-${s.data.status}`}>{s.data.status}</span>}
+          &nbsp;Updated {fmt(s.data.updated)}
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <p class="disclaimer">ResearchVault is an independent analytical exercise for discussion purposes only. Nothing here is investment advice, a recommendation, or a solicitation to buy or sell any security. Figures are drawn from public sources, are time-sensitive, and may be inaccurate or outdated.</p>
+</Base>

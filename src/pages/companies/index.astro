@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const companies = (await getCollection('companies')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+const sectors = await getCollection('sectors');
+const sectorName = (id) => sectors.find((s) => s.id === id)?.data.title ?? id;
+---
+<Base title="All Companies — ResearchVault">
+  <div class="crumb"><a href="/">Home</a><span>/</span>Companies</div>
+  <h1>Companies</h1>
+  <p class="lede">Every company deep-dive across all sectors.</p>
+
+  <table>
+    <thead><tr><th>Company</th><th>Sector</th><th>Stage</th><th>Valuation</th><th>Conviction</th></tr></thead>
+    <tbody>
+      {companies.map((c) => (
+        <tr>
+          <td><a href={`/companies/${c.id}`}><strong>{c.data.title}</strong></a></td>
+          <td>{sectorName(c.data.sector)}</td>
+          <td>{c.data.stage ?? '—'}</td>
+          <td>{c.data.valuation ?? '—'}</td>
+          <td>{c.data.conviction ? <span class={`badge ${c.data.conviction}`}>{c.data.conviction}</span> : '—'}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</Base>

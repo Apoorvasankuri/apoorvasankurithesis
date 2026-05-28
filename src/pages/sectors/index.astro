@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const sectors = (await getCollection('sectors')).sort((a, b) => a.data.order - b.data.order);
+const allCompanies = await getCollection('companies');
+const fmt = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+---
+<Base title="All Sectors — ResearchVault">
+  <div class="crumb"><a href="/">Home</a><span>/</span>Sectors</div>
+  <h1>Sectors</h1>
+  <p class="lede">Every top-level thesis in the vault.</p>
+  <div class="grid">
+    {sectors.map((s) => (
+      <a class="card" href={`/sectors/${s.id}`}>
+        <h3>{s.data.title}</h3>
+        <p>{s.data.summary}</p>
+        <div class="card-meta">{allCompanies.filter(c => c.data.sector === s.id).length} companies · Updated {fmt(s.data.updated)}</div>
+      </a>
+    ))}
+  </div>
+</Base>

@@ -1,0 +1,163 @@
+:root {
+  --navy: #0a2540;
+  --navy-2: #103a5c;
+  --navy-3: #14506e;
+  --teal: #2e8b73;
+  --teal-bright: #6fd1c4;
+  --ink: #1c1c1e;
+  --muted: #5a6b78;
+  --faint: #8a8a8a;
+  --line: #d8dee3;
+  --bg-soft: #f4f7f9;
+  --bg-green: #eef4f1;
+  --risk-bg: #f8efec;
+  --risk-line: #b5482e;
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Georgia, 'Times New Roman', serif;
+  --sans: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  --maxw: 940px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.62;
+  color: var(--ink);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- LAYOUT ---------- */
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+.site-header {
+  background: linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 60%, var(--navy-3) 100%);
+  color: #fff;
+  border-bottom: 3px solid var(--teal-bright);
+}
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; }
+.site-header a.brand { color: #fff; text-decoration: none; font-family: var(--sans); font-weight: 700; font-size: 18px; letter-spacing: -0.2px; }
+.site-header a.brand span { color: var(--teal-bright); }
+.site-nav { font-family: var(--sans); font-size: 13.5px; }
+.site-nav a { color: #cfe3ef; text-decoration: none; margin-left: 22px; letter-spacing: 0.3px; }
+.site-nav a:hover { color: #fff; }
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  margin-top: 64px;
+  padding: 28px 0 48px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--faint);
+}
+.site-footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+main { padding-top: 40px; }
+
+/* ---------- TYPE ---------- */
+h1 { font-size: 40px; line-height: 1.1; letter-spacing: -0.6px; color: var(--navy); margin: 0 0 12px; }
+h2 { font-family: var(--sans); font-size: 24px; color: var(--navy); margin: 44px 0 6px; padding-bottom: 8px; border-bottom: 2px solid var(--navy); letter-spacing: -0.2px; }
+h3 { font-family: var(--sans); font-size: 17px; color: var(--navy-2); margin: 26px 0 6px; }
+p { margin: 0 0 16px; }
+a { color: var(--navy-3); text-decoration-color: var(--teal-bright); text-underline-offset: 2px; }
+strong { color: var(--navy); }
+blockquote {
+  margin: 18px 0; padding: 4px 0 4px 22px;
+  border-left: 3px solid var(--teal-bright);
+  font-style: italic; color: var(--navy-3);
+}
+hr { border: none; border-top: 1px solid var(--line); margin: 36px 0; }
+ul, ol { padding-left: 22px; }
+li { margin-bottom: 7px; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.88em; background: var(--bg-soft); padding: 1px 5px; border-radius: 3px; }
+
+/* ---------- KICKER / META ---------- */
+.kicker { font-family: var(--sans); font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--navy-3); font-weight: 600; margin-bottom: 14px; }
+.lede { font-size: 20px; line-height: 1.5; color: var(--muted); font-style: italic; margin-bottom: 28px; }
+.meta-line { font-family: var(--sans); font-size: 12.5px; color: var(--muted); margin-bottom: 20px; }
+
+/* ---------- HERO THESIS BOX ---------- */
+.thesis-box {
+  background: linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%);
+  color: #eaf3f8; border-radius: 10px; padding: 28px 30px; margin: 28px 0;
+}
+.thesis-box .label { font-family: var(--sans); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--teal-bright); margin-bottom: 10px; }
+.thesis-box p { font-size: 18px; line-height: 1.5; margin: 0; }
+
+/* ---------- CARDS GRID ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; margin: 24px 0; }
+.card {
+  border: 1px solid var(--line); border-top: 3px solid var(--navy-3);
+  border-radius: 8px; padding: 20px 22px; text-decoration: none; color: var(--ink);
+  display: block; transition: box-shadow .15s ease, transform .15s ease;
+  background: #fff;
+}
+.card:hover { box-shadow: 0 6px 22px rgba(10,37,64,.10); transform: translateY(-2px); }
+.card h3 { margin: 0 0 6px; color: var(--navy); }
+.card p { font-size: 14.5px; color: var(--muted); margin: 0; font-family: var(--sans); line-height: 1.45; }
+.card .card-meta { font-family: var(--sans); font-size: 11.5px; color: var(--faint); margin-top: 12px; letter-spacing: .3px; text-transform: uppercase; }
+
+/* ---------- BADGES ---------- */
+.badge { display: inline-block; font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .4px; padding: 2px 9px; border-radius: 20px; text-transform: uppercase; }
+.badge.high { background: #e2f0eb; color: #1f6b58; }
+.badge.medium { background: #fff3df; color: #9a6a1a; }
+.badge.watch { background: #e8eef3; color: #41607a; }
+.badge.avoid { background: var(--risk-bg); color: var(--risk-line); }
+.badge.public { background: #e8eef3; color: #41607a; }
+.badge.private { background: #f0ecf6; color: #6b4a8a; }
+.badge.status-draft { background: #f1f1f1; color: #888; }
+.badge.status-watching { background: #fff3df; color: #9a6a1a; }
+
+/* ---------- STAT ROW ---------- */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin: 24px 0; }
+.stat { background: var(--bg-soft); border-top: 3px solid var(--navy-3); border-radius: 6px; padding: 16px 12px; text-align: center; }
+.stat .big { font-family: var(--sans); font-size: 28px; font-weight: 700; color: var(--navy); line-height: 1; }
+.stat .cap { font-family: var(--sans); font-size: 11.5px; color: var(--muted); margin-top: 8px; line-height: 1.35; }
+
+/* ---------- CALLOUTS ---------- */
+.callout { background: var(--bg-green); border: 1px solid #cfe3da; border-left: 4px solid var(--teal); padding: 18px 22px; border-radius: 6px; margin: 22px 0; }
+.callout .h { font-family: var(--sans); font-weight: 700; color: #1f6b58; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.callout.risk { background: var(--risk-bg); border-color: #e8cabf; border-left-color: var(--risk-line); }
+.callout.risk .h { color: #9e3a22; }
+.callout p:last-child { margin-bottom: 0; }
+
+/* ---------- TABLES ---------- */
+table { width: 100%; border-collapse: collapse; margin: 22px 0; font-family: var(--sans); font-size: 14px; }
+th { background: var(--navy); color: #fff; text-align: left; padding: 9px 12px; font-weight: 600; font-size: 13px; }
+td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.45; }
+tr:nth-child(even) td { background: var(--bg-soft); }
+
+/* ---------- DATA SHEET (company key facts) ---------- */
+.datasheet { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 24px 0; }
+.datasheet .cell { background: #fff; padding: 14px 16px; }
+.datasheet .k { font-family: var(--sans); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--faint); margin-bottom: 4px; }
+.datasheet .v { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--navy); }
+
+/* ---------- BREADCRUMB ---------- */
+.crumb { font-family: var(--sans); font-size: 12.5px; color: var(--muted); margin-bottom: 18px; }
+.crumb a { color: var(--navy-3); text-decoration: none; }
+.crumb a:hover { text-decoration: underline; }
+.crumb span { color: var(--faint); margin: 0 6px; }
+
+/* ---------- PROSE (markdown body) ---------- */
+.prose { font-size: 17.5px; }
+.prose > :first-child { margin-top: 0; }
+
+/* ---------- SECTION INTRO LIST ---------- */
+.linklist { list-style: none; padding: 0; margin: 18px 0; }
+.linklist li { margin-bottom: 0; border-bottom: 1px solid var(--line); }
+.linklist a { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 4px; text-decoration: none; color: var(--ink); gap: 14px; }
+.linklist a:hover { background: var(--bg-soft); }
+.linklist .ll-title { font-weight: 600; color: var(--navy); font-family: var(--sans); font-size: 15.5px; }
+.linklist .ll-sub { font-family: var(--sans); font-size: 13px; color: var(--muted); flex: 1; }
+.linklist .ll-meta { font-family: var(--sans); font-size: 12px; color: var(--faint); white-space: nowrap; }
+
+.disclaimer { font-family: var(--sans); font-size: 12px; color: var(--faint); line-height: 1.5; border-top: 1px solid var(--line); padding-top: 18px; margin-top: 40px; }
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  h1 { font-size: 30px; }
+  .site-nav a { margin-left: 14px; }
+  .lede { font-size: 17px; }
+}
