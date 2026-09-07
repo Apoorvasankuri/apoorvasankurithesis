@@ -1,0 +1,30 @@
+name: Zolotel Pipeline
+
+# Runs the full scrape -> process -> cluster -> rank pipeline on a schedule
+# and writes results to Neon. Also runnable on demand from the Actions tab.
+on:
+  schedule:
+    - cron: "0 6 * * *"   # 06:00 UTC daily (adjust as needed)
+  workflow_dispatch:        # manual "Run workflow" button
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements-pipeline.txt
+
+      - name: Run pipeline
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python run_pipeline.py

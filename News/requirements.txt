@@ -1,0 +1,5 @@
+# Zolotel API (main.py) — installed by Vercel for the serverless function
+fastapi>=0.110
+pydantic>=2.6
+psycopg[binary]>=3.1
+google-genai

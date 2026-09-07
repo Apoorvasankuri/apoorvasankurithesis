@@ -1,0 +1,10 @@
+# Zolotel data pipeline (run_pipeline.py + its 4 stages) — used by GitHub Actions
+aiohttp>=3.9
+feedparser>=6.0
+beautifulsoup4>=4.12
+pandas>=2.0
+openpyxl>=3.1
+requests>=2.31
+python-dotenv>=1.0
+psycopg[binary]>=3.1
+google-genai
